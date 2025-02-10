@@ -2,7 +2,6 @@ package com.example.pokemonappv1.pokemonlist
 
 
 
-import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -33,14 +31,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.request.ImageRequest
-import com.example.pokemonappv1.Data.Pokemon
 import com.example.pokemonappv1.Data.models.PokedexListEntry
 import com.example.pokemonappv1.R
 import com.example.pokemonappv1.ui.theme.RobotoCondensed
@@ -53,16 +49,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.graphics.toArgb
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.pokemonappv1.Data.remote.resources.PokemonList
-import com.example.pokemonappv1.viewmodel.PokemonViewModel
-
 
 
 @Composable
 fun PokemonListScreen(
     navController: NavController,
-    viewModel: PokemonListViewModel
+    viewModel: PokemonListViewModel,
+    onPokemonClick: (String, Int) -> Unit // added by AI
 ){
     Surface(
         color = MaterialTheme.colorScheme.background,
@@ -89,7 +82,7 @@ fun PokemonListScreen(
                 //navController.navigate("pokemon_list_screen")
             }
             Spacer(modifier = Modifier.height(16.dp))
-            PokemonList(navController = navController)
+            PokemonList(navController = navController, onPokemonClick = onPokemonClick)
         }
     }
 }
@@ -207,7 +200,8 @@ fun SearchBar(
 @Composable
 fun PokemonList(
     navController: NavController,
-    viewModel: PokemonListViewModel = hiltViewModel()
+    viewModel: PokemonListViewModel = hiltViewModel(),
+    onPokemonClick: (String, Int) -> Unit
 ){
     val pokemonList by remember {viewModel.pokemonList}
     val endReached by remember {viewModel.endReached}
@@ -229,7 +223,7 @@ fun PokemonList(
                     viewModel.loadPokemonPaginated()
                 }
             }
-            PokedexRow(rowIndex = it, entries = pokemonList, navController = navController)
+            PokedexRow(rowIndex = it, entries = pokemonList, navController = navController, onPokemonClick = onPokemonClick)
         }
     }
     Box (
@@ -253,7 +247,8 @@ fun PokedexEntry(
     entry: PokedexListEntry,
     navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: PokemonListViewModel = hiltViewModel()
+    viewModel: PokemonListViewModel = hiltViewModel(),
+    onPokemonClick: (String, Int) -> Unit
 ) {
     val defaultDominantColor = MaterialTheme.colorScheme.surface
     var dominantColor by remember { mutableStateOf(defaultDominantColor) }
@@ -270,6 +265,7 @@ fun PokedexEntry(
                 )
             )
             .clickable {
+                onPokemonClick(entry.pokemonName, dominantColor.toArgb())
                 navController.navigate(
                     "pokemon_detail_screen/${dominantColor.toArgb()}/${entry.pokemonName}"
                 )
@@ -307,21 +303,24 @@ fun PokedexEntry(
 fun PokedexRow(
     rowIndex: Int,
     entries: List<PokedexListEntry>,
-    navController: NavController
+    navController: NavController,
+    onPokemonClick: (String, Int) -> Unit
 ) {
     Column(){
         Row(){
             PokedexEntry(
                 entry = entries[rowIndex * 2],
                 navController = navController,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                onPokemonClick = onPokemonClick
             )
             Spacer(modifier = Modifier.width(16.dp))
             if (entries.size >= rowIndex * 2 + 2) {
                 PokedexEntry(
                     entry = entries[rowIndex * 2 + 1],
                     navController = navController,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    onPokemonClick = onPokemonClick
                 )
             } else {
                 Spacer(modifier = Modifier.weight(1f))

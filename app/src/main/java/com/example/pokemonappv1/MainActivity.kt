@@ -3,9 +3,7 @@ package com.example.pokemonappv1
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import android.os.Bundle
-import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pokemonappv1.ui.theme.PokemonAppV1Theme
 import com.example.pokemonappv1.viewmodel.PokemonViewModel
 import com.example.pokemonappv1.navigation.PokemonAppNavigation
@@ -22,10 +20,10 @@ class MainActivity : ComponentActivity() {
                 PokemonAppNavigation(viewModel = viewModel)
             }
         }
-        PokemonDetailScreen(
-            dominantColor = dominantColor,
-            pokemonName = pokemonName.toLowerCase(),
-            navController = navController
-        )
+//        PokemonDetailScreen(
+//            dominantColor = dominantColor,
+//            pokemonName = pokemonName.toLowerCase(),
+//            navController = navController
+//        )
     }
 }

@@ -1,6 +1,5 @@
 package com.example.pokemonappv1.pokemondetail
 
-import android.widget.Space
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -24,12 +23,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
@@ -42,7 +39,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -51,7 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 //import androidx.hilt.navigation.compose.hiltNavGraphViewModel
-import androidx.hilt.navigation.compose.hiltNavGraphViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pokemonappv1.Data.remote.resources.Pokemon
 import com.example.pokemonappv1.util.Resource
@@ -65,7 +60,7 @@ import kotlin.math.round
 
 
 @Composable
-fun PokemonListScreen(
+fun PokemonDetailScreen(
     dominantColor: Color,
     pokemonName: String,
     navController: NavController,
@@ -233,7 +228,7 @@ fun PokemonDetailSection(
         PokemonDetailDataSection(pokemonWeight = pokemonInfo.weight,
             pokemonHeight = pokemonInfo.height
         )
-        //PokeminStats
+        PokemonBaseStats(pokemonInfo = pokemonInfo)
     }
 }
 
@@ -337,7 +332,7 @@ fun PokemonStat(
     //modifier: Modifier = Modifier
     ) {
         //basic Animation 0 - %
-        var animationPlayed: Boolean = remember {
+        var animationPlayed by remember {
             mutableStateOf(false)
         }
         val curPercent = animateFloatAsState(

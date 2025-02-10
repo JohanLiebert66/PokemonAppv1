@@ -94,8 +94,11 @@ class PokemonListViewModel @Inject constructor(
                     pokemonList.value += pokedexEnries
                 }
                 is Resource.Error -> {
-
+                    loadError.value = result.message ?: "An unknown error occurred."
+                    isLoading.value = false
                 }
+
+                is Resource.Loading<*> -> TODO()
             }
         }
     }
