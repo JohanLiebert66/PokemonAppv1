@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -66,6 +67,7 @@ fun PokemonDetailScreen(
     navController: NavController,
     topPadding: Dp = 20.dp,
     pokemonImageSize: Dp = 200.dp,
+    //viewModel: PokemonDetailViewModel = hiltNavGraphViewModel(),
     viewModel: PokemonDetailViewModel = hiltViewModel()
 
 ) {
@@ -73,7 +75,7 @@ fun PokemonDetailScreen(
         value = viewModel.getPokemonInfo(pokemonName)
     }.value // refer to the value of the state
     //val pokemonList by viewModel.pokemonList.collectAsState()
-    Box(
+    Box( // Background of the screen
         modifier = Modifier
             .fillMaxSize()
             .background(dominantColor)
@@ -115,11 +117,9 @@ fun PokemonDetailScreen(
                 )
         )
         Box(  // Image of pokemon
-            contentAlignment = Alignment.TopStart,
+            contentAlignment = Alignment.TopCenter,
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-        ){
+                .fillMaxSize()){
             if (pokemonInfo is Resource.Success){
                 pokemonInfo.data?.sprites?.let{
                     AsyncImage(
@@ -158,7 +158,7 @@ fun PokemonDetailTopSection(  // Arrow back button  and  gradient color
             )
     ){
         Icon(
-            imageVector = Icons.Default.ArrowBack,
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = null,
             tint = Color.White,
             modifier = Modifier

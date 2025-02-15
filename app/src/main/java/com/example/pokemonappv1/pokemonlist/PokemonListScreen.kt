@@ -54,7 +54,8 @@ import androidx.compose.ui.graphics.toArgb
 @Composable
 fun PokemonListScreen(
     navController: NavController,
-    viewModel: PokemonListViewModel,
+    //viewModel: PokemonListViewModel = hiltNavGraphViewModel(),
+    viewModel: PokemonListViewModel = hiltViewModel(),
     onPokemonClick: (String, Int) -> Unit // added by AI
 ){
     Surface(
@@ -266,21 +267,32 @@ fun PokedexEntry(
             )
             .clickable {
                 onPokemonClick(entry.pokemonName, dominantColor.toArgb())
-                navController.navigate(
-                    "pokemon_detail_screen/${dominantColor.toArgb()}/${entry.pokemonName}"
-                )
+//                navController.navigate(
+//                    "pokemon_detail_screen/${dominantColor.toArgb()}/${entry.pokemonName}"
+//                )
             }
     ) {  // Content of the Box
         Column {
-            AsyncImage(  // Loads and displays the Pokémon image with Coil
+            AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(entry.imageUrl)
-                    .crossfade(true)
                     .build(),
                 contentDescription = entry.pokemonName,
                 modifier = Modifier
                     .size(120.dp)
-                    .align(CenterHorizontally)
+                    .align(CenterHorizontally),
+                onSuccess = { state ->
+                    // Access the drawable and calculate the dominant color
+                    val drawable = state.result.drawable
+                    if (drawable != null) {
+                        viewModel.calcDominantColor(drawable) { color ->
+                            dominantColor = color
+                        }
+                    }
+                },
+                onError = { state ->
+                    // Optional: Handle error (e.g., show a placeholder or log the error)
+                }
             )
 
             CircularProgressIndicator(
