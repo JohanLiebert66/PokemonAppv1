@@ -5,8 +5,8 @@ import androidx.activity.compose.setContent
 import android.os.Bundle
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pokemonappv1.ui.theme.PokemonAppV1Theme
-import com.example.pokemonappv1.viewmodel.PokemonViewModel
 import com.example.pokemonappv1.navigation.PokemonAppNavigation
+import com.example.pokemonappv1.pokemonlist.PokemonListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PokemonAppV1Theme {
-                val viewModel: PokemonViewModel = hiltViewModel ()
+                val viewModel = hiltViewModel<PokemonListViewModel>()
                 PokemonAppNavigation(viewModel = viewModel)
             }
         }
